@@ -13,7 +13,8 @@ from sklearn.svm import SVC
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.externals import joblib
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.preprocessing import OneHotEncoder
 
 from tqdm import *
 from functools import wraps
@@ -62,11 +63,23 @@ def predict(model, test_data):
 	return pred
 
 def logistic_regression(X, y):
-	lr = LogisticRegression()
+	lr = LogisticRegression(solver="newton-cg", multi_class="multinomial", max_iter=1000)
 	lr.fit(X, y)
 	return lr
+
+def sgd_logistic(X, y):
+	clf = SGDClassifier(loss='log', max_iter=10000)
+	clf.fit(X,y)
+	return clf
 
 def calculate_scores(gt, pred):
 	acc = accuracy_score(gt, pred)
 	f = f1_score(gt, pred, average='micro')
 	return acc, f
+
+def convert_to_onehot(train_labels, val_labels, test_labels):
+	enc = OneHotEncoder()
+	train_labels = enc.fit_transform(train_labels.reshape(-1, 1))
+	test_labels = enc.transform(test_labels.reshape(-1, 1))
+	val_labels = enc.transform(val_labels.reshape(-1, 1))
+	return train_labels, val_labels, test_labels
