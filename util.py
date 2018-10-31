@@ -12,13 +12,15 @@ from sklearn.decomposition import PCA, IncrementalPCA
 from sklearn.svm import SVC
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import train_test_split
-from tqdm import *
+from sklearn.externals import joblib
+from sklearn.linear_model import LogisticRegression
 
+from tqdm import *
 from functools import wraps
 from time import time as _timenow 
 from sys import stderr
 
-def load_cifar(sp=20000):
+def load_cifar():
 	trn_data, trn_labels, tst_data, tst_labels = [], [], [], []
 	def unpickle(file):
 		with open(file, 'rb') as fo:
@@ -36,6 +38,8 @@ def load_cifar(sp=20000):
 	trn_labels = np.asarray(trn_labels)
 	tst_data = np.asarray(tst_data)
 	tst_labels = np.asarray(tst_labels)
+	sp = 30000*0.8
+	sp = int(sp)
 	val_data = trn_data[sp:].copy()
 	val_labels = trn_labels[sp:].copy()
 	trn_data = trn_data[0:sp]
@@ -49,10 +53,20 @@ def find_pca(X, n=10):
 	X = pca_train.transform(X)
 	return pca_train, X
 
-def transform(X, pca):
+def transform_pca(X, pca):
 	X = pca.transform(X)
 	return X
 
-trn_data, trn_labels, val_data, val_labels, tst_data, tst_labels = load_cifar()
-pca_train, trn_data = find_pca(trn_data)
-print (trn_data.shape)
+def predict(model, test_data):
+	pred = model.predict(test_data)
+	return pred
+
+def logistic_regression(X, y):
+	lr = LogisticRegression()
+	lr.fit(X, y)
+	return lr
+
+def calculate_scores(gt, pred):
+	acc = accuracy_score(gt, pred)
+	f = f1_score(gt, pred, average='micro')
+	return acc, f
