@@ -15,6 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.externals import joblib
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 from tqdm import *
 from functools import wraps
@@ -27,7 +28,7 @@ def load_cifar():
 		with open(file, 'rb') as fo:
 			data = pickle.load(fo, encoding='latin1')
 		return data
-	for i in trange(3):
+	for i in trange(5):
 		batchName = 'cifar10/data_batch_{0}'.format(i + 1)
 		unpickled = unpickle(batchName)
 		trn_data.extend(unpickled['data'])
@@ -39,7 +40,7 @@ def load_cifar():
 	trn_labels = np.asarray(trn_labels)
 	tst_data = np.asarray(tst_data)
 	tst_labels = np.asarray(tst_labels)
-	sp = 30000*0.8
+	sp = 50000*0.8
 	sp = int(sp)
 	val_data = trn_data[sp:].copy()
 	val_labels = trn_labels[sp:].copy()
@@ -48,11 +49,15 @@ def load_cifar():
 	return trn_data, trn_labels, val_data, val_labels, tst_data, tst_labels
 
 
-def find_pca(X, n=10):
-	pca_train = IncrementalPCA(n_components=n, batch_size=10)
+def find_pca(X, n=350):
+	pca_train = PCA(n_components=n)
 	pca_train.fit(X)
-	X = pca_train.transform(X)
 	return pca_train, X
+
+def find_lda(X, Y):
+	lda_train = LinearDiscriminantAnalysis()
+	lda_train.fit(X, Y)
+	return lda_train
 
 def transform_pca(X, pca):
 	X = pca.transform(X)
@@ -78,7 +83,7 @@ def calculate_scores(gt, pred):
 	return acc, f
 
 def convert_to_onehot(train_labels, val_labels, test_labels):
-	enc = OneHotEncoder()
+	enc = OneHotEncoder(sparse=False)
 	train_labels = enc.fit_transform(train_labels.reshape(-1, 1))
 	test_labels = enc.transform(test_labels.reshape(-1, 1))
 	val_labels = enc.transform(val_labels.reshape(-1, 1))
