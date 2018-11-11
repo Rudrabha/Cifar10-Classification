@@ -12,7 +12,7 @@ To run a classifier -
 python main.py --classifier DT --depth 3 --representation MLP_Embedding \
 python main.py --clasifier SVM --C 200.0 --representation LDA \
 python main.py --classifier LR --eta 0.001 --epochs 100 --batch_size 1000 \
-python main.py --classifier MLP --eta 0.0001 --epochs 10000 --batch_size 100 --dropout 0.2 \
+python main.py --classifier MLP --eta 0.0001 --epochs 10000 --batch_size 100 --dropout 0.2
 
 All the above mentioned parameters have some default value.\
 
@@ -21,4 +21,4 @@ The PCA would by default use 350 number of components. To use some other number,
 At present, I have pre calculated LDA and PCA on the training data and saved that in the data folder. To recalculate it while running a classifier, 
 
 python main.py --create_dim_red PCA\
-python main.py --create_dim_red LDA\
+python main.py --create_dim_red LDA
