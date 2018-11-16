@@ -17,8 +17,8 @@ python main.py --classifier MLP --eta 0.0001 --epochs 10000 --batch_size 100 --d
 
 All the above mentioned parameters have some default value.
 
-The PCA would by default use 350 number of components. To use some other number, use the --ncomponents option along with --representation PCA
-python main.py --classifier DT --representation PCA --ncomponents 100 \
+The PCA would by default use 350 number of components. To use some other number, use the --ncomponents option along with --representation PCA \
+python main.py --classifier DT --representation PCA --ncomponents 100 
 
 At present, I have pre calculated LDA and PCA on the training data and saved that in the data folder. 
 To recalculate it while running a classifier, 
