@@ -5,8 +5,8 @@ Scikit-learn 0.20.0 \
 keras 2.2.2 \
 tensorflow 1.9.0
 
-The dataset files should be downloaded from https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz.
-Now, rename the folder to cifar10. 
+The dataset files should be downloaded from https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz. \
+Extract and rename the folder to cifar10. 
 
 To run a classifier -
 
