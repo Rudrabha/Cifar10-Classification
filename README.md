@@ -1,5 +1,5 @@
 # Cifar10-Classification
-Requirements- 
+Requirements- \
 python 3.6.6 \
 Scikit-learn 0.20.0 \
 keras 2.2.2 \
